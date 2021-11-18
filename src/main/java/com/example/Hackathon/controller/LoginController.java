@@ -52,7 +52,7 @@ public class LoginController {
     }
 
     @PostMapping("register-new-user")
-    public ResponseEntity<User> addNewBuilding(@RequestBody UserDto model) throws AlreadyExistException {
+    public ResponseEntity<User> addNewUser(@RequestBody UserDto model) throws AlreadyExistException {
         return new ResponseEntity<>( userService.create(model), HttpStatus.OK);
     }
 }
