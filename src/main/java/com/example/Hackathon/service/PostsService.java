@@ -13,9 +13,9 @@ public class PostsService {
     private PostRepo postRepo;
 
 
-    public PostDto addNewPost(PostDto postDto){
-        Posts posts  = new Posts();
-        posts.setDescription(postDto.getDescription());
-        return postDto;
-    }
+//    public PostDto addNewPost(PostDto postDto){
+//        Posts posts  = new Posts();
+//        posts.setDescription(postDto.getDescription());
+//
+//    }
 }

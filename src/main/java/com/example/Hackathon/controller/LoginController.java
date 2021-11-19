@@ -86,4 +86,9 @@ public class LoginController {
         return userService.setImage(multipartFile);
     }
 
+    @GetMapping("/hello")
+    public String getHello(){
+        return "hello";
+    }
+
 }
