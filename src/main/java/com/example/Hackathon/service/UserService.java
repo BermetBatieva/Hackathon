@@ -89,7 +89,7 @@ public class UserService implements UserDetailsService {
         return getByEmail(userEmail);
     }
 
-    public UserDto retrieveCurrentUser(Principal principal) {
+    public UserDto retrieveCurrentUser() {
         UserDto model = new UserDto();
         User user = getCurrentUser();
         model.setEmail(user.getEmail());

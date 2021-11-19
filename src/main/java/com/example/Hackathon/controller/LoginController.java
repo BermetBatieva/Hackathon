@@ -86,8 +86,8 @@ public class LoginController {
 
     @ApiOperation(value = "Данные пользователя")
     @GetMapping("/get-current-user")
-    public UserDto getCurrentUser(Principal principal){
-        return userService.retrieveCurrentUser(principal);
+    public UserDto getCurrentUser(){
+        return userService.retrieveCurrentUser();
     }
 
 
