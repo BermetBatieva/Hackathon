@@ -28,4 +28,6 @@ public class UserDto {
     private String countryCode;
 
     private String group;
+
+    private String urlImage;
 }

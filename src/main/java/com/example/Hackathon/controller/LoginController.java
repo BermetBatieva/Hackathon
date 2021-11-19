@@ -1,6 +1,7 @@
 package com.example.Hackathon.controller;
 
 import com.example.Hackathon.dto.*;
+import com.example.Hackathon.entity.Group;
 import com.example.Hackathon.entity.Image;
 import com.example.Hackathon.jwt.JwtUtils;
 import com.example.Hackathon.service.GroupService;
@@ -91,10 +92,22 @@ public class LoginController {
 
     @ApiOperation(value = "Вход в группу нужно только code")
     @PostMapping("/join-to-group")
-    public ResponseEntity<Boolean> joinToGroup(@RequestBody GroupDto groupDto)
+    public ResponseEntity<Group> joinToGroup(@RequestBody GroupDto groupDto)
     {
         return new ResponseEntity<>(groupService.joinGroup(groupDto.getCode()),
                 HttpStatus.OK);
     }
+
+    @GetMapping("get-my-group")
+    public ResponseEntity<GroupDto> getGroupByCurrentUser() {
+        return new ResponseEntity<>(groupService.getMyGroup(),
+                HttpStatus.OK);
+    }
+
+//    @GetMapping("get-by-group-id/{id}")
+//    public ResponseEntity<GroupDto> getById(@PathVariable Long id){
+//        return new ResponseEntity<>(groupService.getGroupById(id),
+//                HttpStatus.OK);
+//    }
 
 }

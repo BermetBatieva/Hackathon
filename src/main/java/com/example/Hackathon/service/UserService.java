@@ -94,6 +94,9 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByEmail(principal.getName()).orElseThrow(
                 () -> new ResourceNotFoundException("no email",principal.getName()));
         model.setEmail(principal.getName());
+
+        Image image = imageRepo.findByUser_Id(user.getId());
+        model.setUrlImage(image.getUrl());
         model.setDateOfBirth(user.getDateOfBirth());
         model.setFirstname(user.getFirstName());
         model.setNickname(user.getNickname());

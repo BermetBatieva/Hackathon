@@ -2,6 +2,7 @@ package com.example.Hackathon.service;
 
 import com.example.Hackathon.dto.NewsDto;
 import com.example.Hackathon.entity.News;
+import com.example.Hackathon.entity.Status;
 import com.example.Hackathon.repository.NewsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class NewsService {
@@ -32,5 +34,10 @@ public class NewsService {
                 .from(dateToConvert.atZone(ZoneId.systemDefault())
                         .toInstant());
     }
+
+//    public List<News> getAllNews(){
+//        List<News> newsList = newsRepo.findByStatus(Status.ACTIVATE);
+//        List<MenuForBarista> result = new ArrayList<>();
+//    }
 
 }

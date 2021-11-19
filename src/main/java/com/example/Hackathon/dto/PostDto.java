@@ -24,4 +24,5 @@ public class PostDto {
 
     private Long categoryId;
 
+    private String groupName;
 }
