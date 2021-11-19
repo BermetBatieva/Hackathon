@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -33,6 +35,8 @@ public class CommentsService {
 
     @Autowired
     private UserRepository userRepository;
+
+
 
 
     @Autowired
@@ -68,6 +72,25 @@ public class CommentsService {
 
     private Date convertLocalDateTimeToDateUsingInstant(LocalDateTime dateToConvert) {
         return java.util.Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public List<CommentDto> getAllByPost(Long postId){
+        List<Comments>  commentsList = commentsRepo.findByPostsAndStatus(postRepo.findById(postId).orElseThrow(
+                        () -> new ResourceNotFoundException("нет такой айдишки",postId)
+                ),
+                Status.ACTIVATE);
+        List<CommentDto> result = new ArrayList<>();
+
+        for(Comments comment : commentsList){
+            CommentDto commentDto = new CommentDto();
+            commentDto.setComments(comment.getComments());
+            commentDto.setId(comment.getId());
+            commentDto.setUserId(comment.getUser().getId());
+
+            result.add(commentDto);
+
+        }
+        return result;
     }
 
 }

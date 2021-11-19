@@ -75,13 +75,8 @@ public class PostsService {
         List<PostDtoByCategory> result = new ArrayList<>();
         for (Posts posts : list) {
             PostDtoByCategory model = new PostDtoByCategory();
-            model.setNickname(posts.getUser().getNickname());
+            model.setNickname(posts.getUser().getEmail());
             model.setUserId(posts.getUser().getId());
-            List<Comments> commentsList = commentsRepo.findByPosts_IdAndStatus(posts.getId(),Status.ACTIVATE);
-
-            model.setCommentsList(commentsList);
-
-            System.out.println(commentsList.get(0));
             List<Image> image = imageRepo.findByPosts_Id(posts.getId());
 
             List<String> url = new ArrayList<>();
@@ -97,7 +92,14 @@ public class PostsService {
         return result;
     }
 
-
+//    List<Comments> commentsList = commentsRepo.findByPosts_IdAndStatus(posts.getId(),Status.ACTIVATE);
+//
+//    List<String> comList = new ArrayList<>();
+//
+//            for(Comments i :  commentsList){
+//        comList.add(i.getComments());
+//    }
+//            model.setCommentsList(comList);
 
 
 

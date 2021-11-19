@@ -24,6 +24,4 @@ public class PostDtoByCategory {
 
     private Long userId;
 
-    private List<Comments> commentsList;
-
 }
