@@ -96,7 +96,10 @@ public class UserService implements UserDetailsService {
         model.setEmail(principal.getName());
 
         Image image = imageRepo.findByUser_Id(user.getId());
-        model.setUrlImage(image.getUrl());
+        if(image == null)
+            model.setUrlImage(null);
+        else
+            model.setUrlImage(image.getUrl());
         model.setDateOfBirth(user.getDateOfBirth());
         model.setFirstname(user.getFirstName());
         model.setNickname(user.getNickname());
