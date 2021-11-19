@@ -1,12 +1,12 @@
 package com.example.Hackathon.service;
 
 import com.example.Hackathon.dto.PostDto;
-import com.example.Hackathon.entity.Category;
-import com.example.Hackathon.entity.Posts;
-import com.example.Hackathon.entity.Status;
-import com.example.Hackathon.entity.User;
+import com.example.Hackathon.dto.PostDtoByCategory;
+import com.example.Hackathon.entity.*;
 import com.example.Hackathon.exception.ResourceNotFoundException;
 import com.example.Hackathon.repository.CategoryRepo;
+import com.example.Hackathon.repository.CommentsRepo;
+import com.example.Hackathon.repository.ImageRepo;
 import com.example.Hackathon.repository.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,9 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PostsService {
@@ -28,6 +30,12 @@ public class PostsService {
 
     @Autowired
     private CategoryRepo categoryRepo;
+
+    @Autowired
+    private ImageRepo imageRepo;
+
+    @Autowired
+    private CommentsRepo commentsRepo;
 
 
     public Posts addNewPost(PostDto postDto){
@@ -59,6 +67,39 @@ public class PostsService {
 
         return posts;
     }
+
+
+    public List<PostDtoByCategory> allPostByCategory(long categoryId) {
+        List<Posts> list = postRepo.findByCategory_IdAndStatusAndGroup_Id(categoryId,
+                Status.ACTIVATE,null);
+        List<PostDtoByCategory> result = new ArrayList<>();
+        for (Posts posts : list) {
+            PostDtoByCategory model = new PostDtoByCategory();
+            model.setNickname(posts.getUser().getNickname());
+            model.setUserId(posts.getUser().getId());
+            List<Comments> commentsList = commentsRepo.findByPosts_IdAndStatus(posts.getId(),Status.ACTIVATE);
+
+            model.setCommentsList(commentsList);
+
+            System.out.println(commentsList.get(0));
+            List<Image> image = imageRepo.findByPosts_Id(posts.getId());
+
+            List<String> url = new ArrayList<>();
+            for(Image i : image ){
+                url.add(i.getUrl());
+            }
+            model.setUrlImage(url);
+            model.setCategoryId(posts.getCategory().getId());
+            model.setTopic(posts.getTopic());
+            model.setDescription(posts.getDescription());
+            result.add(model);
+        }
+        return result;
+    }
+
+
+
+
 
 
 }

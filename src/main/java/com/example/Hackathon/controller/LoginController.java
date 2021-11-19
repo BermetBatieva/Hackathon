@@ -1,9 +1,11 @@
 package com.example.Hackathon.controller;
 
 import com.example.Hackathon.dto.*;
+import com.example.Hackathon.entity.Comments;
 import com.example.Hackathon.entity.Group;
 import com.example.Hackathon.entity.Image;
 import com.example.Hackathon.jwt.JwtUtils;
+import com.example.Hackathon.service.CommentsService;
 import com.example.Hackathon.service.GroupService;
 import com.example.Hackathon.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +40,10 @@ public class LoginController {
 
     @Autowired
     private GroupService groupService;
+
+
+    @Autowired
+    private CommentsService commentsService;
 
 
     @ApiOperation(value = "Авторизация пользователей. (Получение токена)")
@@ -109,6 +115,19 @@ public class LoginController {
     public ResponseEntity<GroupDto> getById(@PathVariable Long id){
         return new ResponseEntity<>(groupService.getGroupById(id),
                 HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Добавить комментарий")
+    @PostMapping("/add-comment")
+    public ResponseEntity<Comments> addComment(@RequestBody CommentDto commentDto)
+    {
+        return new ResponseEntity<>(commentsService.addComment(commentDto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Удалить комментарий по id")
+    @DeleteMapping("/delete-comment/{id}")
+    public ResponseEntity<Comments> deleteComment(@PathVariable Long id){
+        return new ResponseEntity<>(commentsService.deleteComment(id), HttpStatus.OK);
     }
 
 }
