@@ -4,6 +4,7 @@ import com.example.Hackathon.dto.AuthenticationResponse;
 import com.example.Hackathon.dto.UserDto;
 import com.example.Hackathon.dto.UserLogin;
 import com.example.Hackathon.dto.UserRegister;
+import com.example.Hackathon.entity.Image;
 import com.example.Hackathon.entity.User;
 import com.example.Hackathon.exception.AlreadyExistException;
 import com.example.Hackathon.jwt.JwtUtils;
@@ -16,6 +17,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @CrossOrigin
 @RestController
@@ -62,7 +66,6 @@ public class LoginController {
         } catch (BadCredentialsException e) {
             throw new Exception("Incorrect username and password", e);
         }
-
         final UserDetails userDetails = userService
                 .loadUserByUsername(userDto.getEmail());
 
@@ -78,4 +81,12 @@ public class LoginController {
         UserDto model = userService.retrieveCurrentUser();
         return ResponseEntity.ok(model);
     }
+
+
+    @PutMapping("/image")
+    public ResponseEntity<Image> setImage(@RequestParam(name = "file") MultipartFile multipartFile) throws IOException, IOException {
+        return userService.setImage(multipartFile);
+    }
+
+
 }

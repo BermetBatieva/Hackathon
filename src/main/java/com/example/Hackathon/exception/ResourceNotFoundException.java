@@ -15,4 +15,6 @@ public class ResourceNotFoundException extends RuntimeException{
 
     public ResourceNotFoundException(String s, Long id) {
     }
+    public ResourceNotFoundException(String s, String message) {
+    }
 }

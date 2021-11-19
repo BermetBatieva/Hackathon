@@ -1,15 +1,20 @@
 package com.example.Hackathon.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.Hackathon.dto.UserDto;
 import com.example.Hackathon.dto.UserRegister;
 import com.example.Hackathon.entity.ERole;
 import com.example.Hackathon.entity.Group;
+import com.example.Hackathon.entity.Image;
 import com.example.Hackathon.entity.User;
 import com.example.Hackathon.exception.AlreadyExistException;
 import com.example.Hackathon.exception.ResourceNotFoundException;
 import com.example.Hackathon.repository.GroupRepo;
+import com.example.Hackathon.repository.ImageRepo;
 import com.example.Hackathon.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,9 +22,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -30,6 +40,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder encoder;
+
+    @Autowired
+    private ImageRepo imageRepo;
 
 
     @Autowired
@@ -88,5 +101,35 @@ public class UserService implements UserDetailsService {
         model.setEmail(user.getEmail());
         model.setGroup(user.getGroup().getName());
         return model;
+    }
+
+
+
+
+    public ResponseEntity<Image> setImage(MultipartFile multipartFile) throws IOException {
+
+        final String urlKey = "cloudinary://513184318945249:-PXAzPrMMtx1J7NCL1afdr59new@neobis/"; //в конце добавляем '/'
+        Image image = new Image();
+        User user = getCurrentUser();
+        File file;
+        try{
+            file = Files.createTempFile(System.currentTimeMillis() + "",
+                            multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().length()-4)) // .jpg
+                    .toFile();
+            multipartFile.transferTo(file);
+
+            Cloudinary cloudinary = new Cloudinary(urlKey);
+            Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+            image.setUser(user);
+            image.setName((String) uploadResult.get("public_id"));
+            image.setUrl((String) uploadResult.get("url"));
+            image.setFormat((String) uploadResult.get("format"));
+            imageRepo.save(image);
+
+
+            return ResponseEntity.ok().body(image);
+        }catch (IOException e){
+            throw new IOException("User was unable to set a image");
+        }
     }
 }
