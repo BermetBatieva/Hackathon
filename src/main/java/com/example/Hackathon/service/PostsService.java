@@ -50,4 +50,15 @@ public class PostsService {
                 .from(dateToConvert.atZone(ZoneId.systemDefault())
                         .toInstant());
     }
+
+    public Posts deletePost(Long id){
+        Posts posts = postRepo.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("нет поста с таким id ",id));
+        posts.setStatus(Status.DELETED);
+        postRepo.save(posts);
+
+        return posts;
+    }
+
+
 }
