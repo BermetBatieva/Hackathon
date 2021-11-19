@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @CrossOrigin
 @RestController
@@ -75,8 +76,8 @@ public class LoginController {
 
     @ApiOperation(value = "Данные пользователя")
     @GetMapping("get-current-user")
-    public UserDto getCurrentUser(){
-        return userService.retrieveCurrentUser();
+    public UserDto getCurrentUser(Principal principal){
+        return userService.retrieveCurrentUser(principal);
     }
 
 

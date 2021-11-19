@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -83,16 +84,18 @@ public class UserService implements UserDetailsService {
     }
 
     private User getCurrentUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
 
         String userEmail= authentication.getName();
         return getByEmail(userEmail);
     }
 
-    public UserDto retrieveCurrentUser() {
-        User user = getCurrentUser();
+    public UserDto retrieveCurrentUser(Principal principal) {
         UserDto model = new UserDto();
-        model.setId(user.getId());
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(
+                () -> new ResourceNotFoundException("no email",principal.getName()));
+        model.setEmail(principal.getName());
         model.setDateOfBirth(user.getDateOfBirth());
         model.setFirstname(user.getFirstName());
         model.setNickname(user.getNickname());
