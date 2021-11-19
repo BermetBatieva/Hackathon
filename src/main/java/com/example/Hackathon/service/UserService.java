@@ -107,8 +107,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-
-
     public ResponseEntity<Image> setImage(MultipartFile multipartFile) throws IOException {
 
         final String urlKey = "cloudinary://513184318945249:-PXAzPrMMtx1J7NCL1afdr59new@neobis/"; //в конце добавляем '/'

@@ -55,7 +55,7 @@ public class LoginController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
-    @PostMapping("register-new-user")
+    @PostMapping("/register-new-user")
     public ResponseEntity<AuthenticationResponse> addNewUser(@RequestBody UserRegister userDto) throws Exception {
         userService.create(userDto);
         try{
@@ -75,7 +75,7 @@ public class LoginController {
 
 
     @ApiOperation(value = "Данные пользователя")
-    @GetMapping("get-current-user")
+    @GetMapping("/get-current-user")
     public UserDto getCurrentUser(Principal principal){
         return userService.retrieveCurrentUser(principal);
     }
@@ -85,6 +85,5 @@ public class LoginController {
     public ResponseEntity<Image> setImage(@RequestParam(name = "file") MultipartFile multipartFile) throws IOException, IOException {
         return userService.setImage(multipartFile);
     }
-
 
 }

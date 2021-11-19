@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepo extends JpaRepository<Posts,Long> {
+
+    Posts findByUser_Id(Long id);
 }
