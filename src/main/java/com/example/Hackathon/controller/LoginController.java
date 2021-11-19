@@ -104,6 +104,7 @@ public class LoginController {
                 HttpStatus.OK);
     }
 
+
     @GetMapping("get-by-group-id/{id}")
     public ResponseEntity<GroupDto> getById(@PathVariable Long id){
         return new ResponseEntity<>(groupService.getGroupById(id),
