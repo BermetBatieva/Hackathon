@@ -9,7 +9,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UserDto {
+public class UserRegister {
 
     private Long id;
 
@@ -26,6 +26,4 @@ public class UserDto {
     private Date dateOfBirth;
 
     private String countryCode;
-
-    private String group;
 }

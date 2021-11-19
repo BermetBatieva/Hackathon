@@ -2,13 +2,14 @@ package com.example.Hackathon.controller;
 
 import com.example.Hackathon.dto.AuthenticationResponse;
 import com.example.Hackathon.dto.UserDto;
+import com.example.Hackathon.dto.UserLogin;
+import com.example.Hackathon.dto.UserRegister;
 import com.example.Hackathon.entity.User;
 import com.example.Hackathon.exception.AlreadyExistException;
 import com.example.Hackathon.jwt.JwtUtils;
 import com.example.Hackathon.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,7 +35,7 @@ public class LoginController {
 
     @ApiOperation(value = "Авторизация пользователей. (Получение токена)")
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody UserDto userDto) throws Exception {
+    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody UserLogin userDto) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword())
@@ -52,7 +53,29 @@ public class LoginController {
     }
 
     @PostMapping("register-new-user")
-    public ResponseEntity<User> addNewUser(@RequestBody UserDto model) throws AlreadyExistException {
-        return new ResponseEntity<>( userService.create(model), HttpStatus.OK);
+    public ResponseEntity<AuthenticationResponse> addNewUser(@RequestBody UserRegister userDto) throws Exception {
+        userService.create(userDto);
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword())
+            );
+        } catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username and password", e);
+        }
+
+        final UserDetails userDetails = userService
+                .loadUserByUsername(userDto.getEmail());
+
+        final String jwt = jwtTokenUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    }
+
+
+    @ApiOperation(value = "Данные пользователя")
+    @GetMapping("get-current-user")
+    public ResponseEntity<UserDto> getCurrentUser(){
+        UserDto model = userService.retrieveCurrentUser();
+        return ResponseEntity.ok(model);
     }
 }

@@ -46,6 +46,7 @@ public class User implements UserDetails {
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
+    private String countryCode;
 
 
     @OneToOne
