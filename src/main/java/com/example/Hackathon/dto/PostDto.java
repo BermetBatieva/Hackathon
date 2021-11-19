@@ -18,15 +18,9 @@ import java.util.Date;
 @Data
 public class PostDto {
 
-    private Long id;
-
-    private String nickname;
-
     private String topic; // тема
 
     private String description; // описание
-
-    private Date date;
 
     private Long categoryId;
 

@@ -33,4 +33,7 @@ public class Posts {
     @ManyToOne
     private Group group;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
 }

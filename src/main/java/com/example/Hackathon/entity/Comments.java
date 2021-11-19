@@ -28,4 +28,8 @@ public class Comments {
 
 
     private Date date;
+
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }

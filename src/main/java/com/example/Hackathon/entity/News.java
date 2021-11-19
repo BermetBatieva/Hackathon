@@ -30,5 +30,7 @@ public class News {
     @Column(name = "url_web_site")
     private String urlWebSite;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 }
