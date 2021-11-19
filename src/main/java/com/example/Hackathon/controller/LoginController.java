@@ -5,8 +5,6 @@ import com.example.Hackathon.dto.UserDto;
 import com.example.Hackathon.dto.UserLogin;
 import com.example.Hackathon.dto.UserRegister;
 import com.example.Hackathon.entity.Image;
-import com.example.Hackathon.entity.User;
-import com.example.Hackathon.exception.AlreadyExistException;
 import com.example.Hackathon.jwt.JwtUtils;
 import com.example.Hackathon.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -77,9 +75,8 @@ public class LoginController {
 
     @ApiOperation(value = "Данные пользователя")
     @GetMapping("get-current-user")
-    public ResponseEntity<UserDto> getCurrentUser(){
-        UserDto model = userService.retrieveCurrentUser();
-        return ResponseEntity.ok(model);
+    public UserDto getCurrentUser(){
+        return userService.retrieveCurrentUser();
     }
 
 
