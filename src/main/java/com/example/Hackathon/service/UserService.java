@@ -105,7 +105,6 @@ public class UserService implements UserDetailsService {
         model.setNickname(user.getNickname());
         model.setLastname(user.getLastName());
         model.setCountryCode(user.getCountryCode());
-        model.setEmail(user.getEmail());
         return model;
     }
 
