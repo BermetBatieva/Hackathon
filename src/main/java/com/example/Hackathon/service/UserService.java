@@ -91,9 +91,8 @@ public class UserService implements UserDetailsService {
 
     public UserDto retrieveCurrentUser(Principal principal) {
         UserDto model = new UserDto();
-        User user = userRepository.findByEmail(principal.getName()).orElseThrow(
-                () -> new ResourceNotFoundException("no email",principal.getName()));
-        model.setEmail(principal.getName());
+        User user = getCurrentUser();
+        model.setEmail(user.getEmail());
 
         Image image = imageRepo.findByUser_Id(user.getId());
         if(image == null)
