@@ -83,7 +83,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    private User getCurrentUser(){
+    public User getCurrentUser(){
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
@@ -102,7 +102,6 @@ public class UserService implements UserDetailsService {
         model.setLastname(user.getLastName());
         model.setCountryCode(user.getCountryCode());
         model.setEmail(user.getEmail());
-        model.setGroup(user.getGroup().getName());
         return model;
     }
 

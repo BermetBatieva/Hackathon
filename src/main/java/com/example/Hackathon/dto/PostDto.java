@@ -28,4 +28,6 @@ public class PostDto {
 
     private Date date;
 
+    private Long categoryId;
+
 }
