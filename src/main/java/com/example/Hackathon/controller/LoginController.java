@@ -1,14 +1,13 @@
 package com.example.Hackathon.controller;
 
-import com.example.Hackathon.dto.AuthenticationResponse;
-import com.example.Hackathon.dto.UserDto;
-import com.example.Hackathon.dto.UserLogin;
-import com.example.Hackathon.dto.UserRegister;
+import com.example.Hackathon.dto.*;
 import com.example.Hackathon.entity.Image;
 import com.example.Hackathon.jwt.JwtUtils;
+import com.example.Hackathon.service.GroupService;
 import com.example.Hackathon.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,6 +33,10 @@ public class LoginController {
 
     @Autowired
     private UserService userService;
+
+
+    @Autowired
+    private GroupService groupService;
 
 
     @ApiOperation(value = "Авторизация пользователей. (Получение токена)")
@@ -86,9 +89,12 @@ public class LoginController {
         return userService.setImage(multipartFile);
     }
 
-    @GetMapping("/hello")
-    public String getHello(){
-        return "hello";
+    @ApiOperation(value = "Вход в группу нужно только code")
+    @PostMapping("/join-to-group")
+    public ResponseEntity<Boolean> joinToGroup(@RequestBody GroupDto groupDto)
+    {
+        return new ResponseEntity<>(groupService.joinGroup(groupDto.getCode()),
+                HttpStatus.OK);
     }
 
 }

@@ -5,6 +5,7 @@ import com.example.Hackathon.entity.Group;
 import com.example.Hackathon.entity.User;
 import com.example.Hackathon.exception.ResourceNotFoundException;
 import com.example.Hackathon.repository.GroupRepo;
+import com.example.Hackathon.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class GroupService{
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public Group createGroup(GroupDto groupDto) {
         Group group = new Group();
@@ -34,6 +38,8 @@ public class GroupService{
         }
         else{
             curUser.setGroup(groupRepo.findByCode(code));
+            userRepository.save(curUser);
+
             return true;
         }
     }
