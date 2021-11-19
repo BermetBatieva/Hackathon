@@ -2,9 +2,11 @@ package com.example.Hackathon.service;
 
 import com.example.Hackathon.dto.UserDto;
 import com.example.Hackathon.entity.ERole;
+import com.example.Hackathon.entity.Group;
 import com.example.Hackathon.entity.User;
 import com.example.Hackathon.exception.AlreadyExistException;
 import com.example.Hackathon.exception.ResourceNotFoundException;
+import com.example.Hackathon.repository.GroupRepo;
 import com.example.Hackathon.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -22,6 +27,11 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder encoder;
+
+
+    @Autowired
+    private GroupRepo groupRepo;
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -47,6 +57,19 @@ public class UserService implements UserDetailsService {
             user.setEmail(userDto.getEmail());
         else
             throw  new AlreadyExistException("User email" + userDto.getEmail() + "существует");
+        user.setNickname(userDto.getNickname());
+        user.setCodeForGroup(userDto.getCodeForGroup());
+       if (groupRepo.findByCode(userDto.getCodeForGroup()) == null)
+       {
+           throw new ResourceNotFoundException("Group not found");
+       }
+       else{
+           user.setGroup(groupRepo.findByCode(userDto.getCodeForGroup()));
+       }
+
+        user.setFirstName(userDto.getFirstname());
+        user.setLastName(userDto.getLastname());
+        user.setDateOfBirth(userDto.getDateOfBirth());
         userRepository.save(user);
         return user;
     }

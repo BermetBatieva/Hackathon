@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 
 @AllArgsConstructor
@@ -29,6 +30,9 @@ public class User implements UserDetails {
     @Column(name ="last_name")
     private String lastName;
 
+    @Column(name ="nick_name")
+    private String nickname;
+
     @Column(name ="email")
     private String email;
 
@@ -37,6 +41,20 @@ public class User implements UserDetails {
 
     @Column(name = "password")
     private String userPassword;
+
+
+    @Column(name = "date_of_birth")
+    private Date dateOfBirth;
+
+
+
+    @OneToOne
+    private Group group;
+
+
+    @Column(name = "code_for_group")
+    private Long CodeForGroup;
+
 
 
     @Override
