@@ -54,6 +54,7 @@ public class AdminController {
     }
 
 
+    @ApiOperation(value = "add photo for news")
     @PutMapping("/image/{newsId}")
     public ResponseEntity<Image> setImage(@RequestParam(name = "file") MultipartFile multipartFile, //больше одного RequestParam нельзя, когда MultipartFile
                                           @PathVariable Long newsId) throws IOException, IOException {
