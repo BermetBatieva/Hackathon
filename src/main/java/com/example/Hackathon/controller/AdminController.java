@@ -3,6 +3,7 @@ package com.example.Hackathon.controller;
 import com.example.Hackathon.dto.GroupDto;
 import com.example.Hackathon.dto.NewsDto;
 import com.example.Hackathon.entity.Group;
+import com.example.Hackathon.entity.Image;
 import com.example.Hackathon.entity.News;
 import com.example.Hackathon.entity.Posts;
 import com.example.Hackathon.service.GroupService;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @CrossOrigin
 @RestController
@@ -47,6 +51,13 @@ public class AdminController {
     public ResponseEntity<News> createNewGroup(@RequestBody NewsDto newsDto)
     {
         return new ResponseEntity<>(newsService.addNews(newsDto), HttpStatus.OK);
+    }
+
+
+    @PutMapping("/image/{newsId}")
+    public ResponseEntity<Image> setImage(@RequestParam(name = "file") MultipartFile multipartFile, //больше одного RequestParam нельзя, когда MultipartFile
+                                          @PathVariable Long newsId) throws IOException, IOException {
+        return newsService.setImage(multipartFile,newsId);
     }
 
 
