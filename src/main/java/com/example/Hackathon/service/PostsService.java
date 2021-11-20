@@ -154,6 +154,7 @@ public class PostsService {
             model.setUrlImage(url);
             model.setNickname(posts.getUser().getNickname());
             model.setId(posts.getId());
+            model.setDate(posts.getDate());
 
             result.add(model);
         }
