@@ -3,6 +3,7 @@ package com.example.Hackathon.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.Hackathon.dto.UserDto;
+import com.example.Hackathon.dto.ResponseMessage;
 import com.example.Hackathon.dto.UserRegister;
 import com.example.Hackathon.entity.ERole;
 import com.example.Hackathon.entity.Group;
@@ -14,6 +15,7 @@ import com.example.Hackathon.repository.GroupRepo;
 import com.example.Hackathon.repository.ImageRepo;
 import com.example.Hackathon.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,10 +26,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -42,6 +46,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private ImageRepo imageRepo;
+
+    @Autowired
+    private MailService mailService;
 
 
     @Autowired
@@ -133,5 +140,20 @@ public class UserService implements UserDetailsService {
         }catch (IOException e){
             throw new IOException("User was unable to set a image");
         }
+    }
+
+    public ResponseMessage sendForgotPassword(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("not found!")
+        );
+        if (user == null)
+            return new ResponseMessage(HttpStatus.NOT_FOUND.value(), "User email " + email + " not found!");
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String message = "Hello, ! \n" +
+                " Please, visit next link to change your password: http:localhost:8080/user/changeForgotPassword/" + localDateTime;
+        if (!mailService.send(user.getEmail(), "Change password", message))
+            return new ResponseMessage(HttpStatus.BAD_GATEWAY.value(), "smtp server failure, request was not sent");
+        return new ResponseMessage(HttpStatus.OK.value(), "Successfully sent");
     }
 }

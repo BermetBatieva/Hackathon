@@ -25,13 +25,13 @@ public class MessageService {
     @Autowired
     MessageRepo messageRepo;
 
-    public Message sendMessage(MessageDto messageDto)
+    public Message sendMessage(String messageDto)
     {
         Message message = new Message();
         LocalDateTime localDateTime = LocalDateTime.now();
         message.setStatus(Status.ACTIVATE);
         message.setUser(userService.getCurrentUser());
-        message.setMessage(messageDto.getMessage());
+        message.setMessage(messageDto);
         message.setDate(convertLocalDateTimeToDateUsingInstant(localDateTime));
         messageRepo.save(message);
         return message;

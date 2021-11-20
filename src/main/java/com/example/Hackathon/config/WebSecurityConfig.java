@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/login").permitAll()
+                .antMatchers("/user/**").permitAll()
                 .antMatchers("/admin/*").hasRole(String.valueOf(ERole.ROLE_ADMIN.name))
                 .antMatchers("/user/*").permitAll()
                 .anyRequest()

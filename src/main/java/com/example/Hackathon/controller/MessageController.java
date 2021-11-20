@@ -24,9 +24,9 @@ public class MessageController {
 
     @ApiOperation(value = "Отправить сообщение")
     @PostMapping("/send-message")
-    public ResponseEntity<Message> sendMessage(@RequestBody MessageDto messageDto)
+    public ResponseEntity<Message> sendMessage(@RequestParam(name = "text") String message)
     {
-        return new ResponseEntity<>(messageService.sendMessage(messageDto), HttpStatus.OK);
+        return new ResponseEntity<>(messageService.sendMessage(message), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Удалить сообщение")

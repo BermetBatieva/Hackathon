@@ -4,6 +4,7 @@ import com.example.Hackathon.dto.*;
 import com.example.Hackathon.entity.Comments;
 import com.example.Hackathon.entity.Group;
 import com.example.Hackathon.entity.Image;
+import com.example.Hackathon.entity.User;
 import com.example.Hackathon.jwt.JwtUtils;
 import com.example.Hackathon.service.CommentsService;
 import com.example.Hackathon.service.GroupService;
@@ -128,6 +129,11 @@ public class LoginController {
     @DeleteMapping("/delete-comment/{id}")
     public ResponseEntity<Comments> deleteComment(@PathVariable Long id){
         return new ResponseEntity<>(commentsService.deleteComment(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/forgotPassword/{email}") //на email юзера приходит уникальная ссылка со сроком истечения в 5 минут для изменения пароля на почту.
+    public ResponseMessage sendForgotPassword(@PathVariable String email){
+        return userService.sendForgotPassword(email);
     }
 
 }
