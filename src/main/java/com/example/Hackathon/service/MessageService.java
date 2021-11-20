@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class MessageService {
@@ -56,6 +57,13 @@ public class MessageService {
     private Date convertLocalDateTimeToDateUsingInstant(LocalDateTime dateToConvert) {
         return java.util.Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
     }
+
+
+   public List<Message>  getAllChats(){
+      List<Message> messageList =  messageRepo.findByStatus(Status.ACTIVATE);
+
+      return messageList;
+   }
 
 
 }
