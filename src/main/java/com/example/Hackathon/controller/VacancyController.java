@@ -1,5 +1,6 @@
 package com.example.Hackathon.controller;
 
+import com.example.Hackathon.dto.NewsDto;
 import com.example.Hackathon.dto.VacancyDto;
 import com.example.Hackathon.entity.Vacancy;
 import com.example.Hackathon.service.VacancyService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @CrossOrigin
@@ -30,5 +33,10 @@ public class VacancyController {
     public ResponseEntity<Vacancy> deleteVacancy(@PathVariable Long id)
     {
         return new ResponseEntity<>(vacancyService.deleteVacancy(id), HttpStatus.OK);
+    }
+
+    @GetMapping("all")
+    public List<Vacancy> getAll(){
+        return vacancyService.getAllVacancies();
     }
 }
