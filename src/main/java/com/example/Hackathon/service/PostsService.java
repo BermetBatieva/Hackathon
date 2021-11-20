@@ -3,6 +3,7 @@ package com.example.Hackathon.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.Hackathon.dto.PostDto;
+import com.example.Hackathon.dto.PostDtoAll;
 import com.example.Hackathon.dto.PostDtoByCategory;
 import com.example.Hackathon.entity.*;
 import com.example.Hackathon.exception.ResourceNotFoundException;
@@ -136,6 +137,27 @@ public class PostsService {
             }
         });
         return ResponseEntity.ok().body(posts);
+    }
+
+    public List<PostDtoAll> getAll() {
+        List<Posts> list = postRepo.findByStatus(Status.ACTIVATE);
+        List<PostDtoAll> result = new ArrayList<>();
+        for (Posts posts : list) {
+            PostDtoAll model = new PostDtoAll();
+            model.setDescription(posts.getDescription());
+            model.setTopic(posts.getTopic());
+            List<String>  url = new ArrayList<>();
+            List<Image> imageList = imageRepo.findByPosts_Id(posts.getId());
+            for(Image i : imageList ){
+                url.add(i.getUrl());
+            }
+            model.setUrlImage(url);
+            model.setNickname(posts.getUser().getNickname());
+            model.setId(posts.getId());
+
+            result.add(model);
+        }
+        return result;
     }
 
 

@@ -11,6 +11,8 @@ import java.util.List;
 @Data
 public class PostDtoAll {
 
+    private Long id;
+
     private String topic; // тема
 
     private String description; // описание
@@ -21,5 +23,5 @@ public class PostDtoAll {
 
     private List<String> urlImage;
 
-    private List<CommentDto> commentDtos;
+
 }

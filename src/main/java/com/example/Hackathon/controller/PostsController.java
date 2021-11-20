@@ -1,6 +1,7 @@
 package com.example.Hackathon.controller;
 
 import com.example.Hackathon.dto.PostDto;
+import com.example.Hackathon.dto.PostDtoAll;
 import com.example.Hackathon.dto.PostDtoByCategory;
 import com.example.Hackathon.entity.Posts;
 import com.example.Hackathon.service.PostsService;
@@ -40,5 +41,10 @@ public class PostsController {
     public ResponseEntity<Posts> setImage(@RequestParam(name = "file") MultipartFile[] multipartFile,
                                           @PathVariable Long id) throws IOException, IOException {
         return postsService.setImage(multipartFile,id);
+    }
+
+    @GetMapping("all")
+    public List<PostDtoAll> getAllPosts(){
+        return postsService.getAll();
     }
 }
