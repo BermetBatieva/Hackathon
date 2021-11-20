@@ -9,10 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NewsDto {
 
+    private Long id;
+
     private String description;
 
     private String topic;
 
     private String url;
+
+    private String urlImage;
 
 }

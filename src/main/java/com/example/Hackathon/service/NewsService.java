@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -83,9 +84,21 @@ public class NewsService {
         }
     }
 
-    public List<News> getAll(){
-        List<News> news = newsRepo.findByStatus(Status.ACTIVATE);
-        return  news;
+    public List<NewsDto> getAll() {
+        List<News> list = newsRepo.findByStatus(Status.ACTIVATE);
+        List<NewsDto> result = new ArrayList<>();
+
+        for (News n : list) {
+            NewsDto model = new NewsDto();
+            model.setId(n.getId());
+            model.setTopic(n.getTopic());
+            model.setDescription(n.getDescription());
+            model.setUrl(n.getUrlWebSite());
+            Image image = imageRepo.findByNews_Id(n.getId());
+            model.setUrlImage(image.getUrl());
+            result.add(model);
+        }
+        return result;
     }
 
 }

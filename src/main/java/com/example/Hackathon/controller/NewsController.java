@@ -1,5 +1,6 @@
 package com.example.Hackathon.controller;
 
+import com.example.Hackathon.dto.NewsDto;
 import com.example.Hackathon.dto.PostDtoByCategory;
 import com.example.Hackathon.entity.News;
 import com.example.Hackathon.service.NewsService;
@@ -19,7 +20,7 @@ public class NewsController {
 
 
     @GetMapping("all")
-    public List<News> getAllPostInMainByCategory(){
+    public List<NewsDto> getAllPostInMainByCategory(){
         return newsService.getAll();
     }
 
