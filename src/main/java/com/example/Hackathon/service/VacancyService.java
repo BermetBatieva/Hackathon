@@ -1,9 +1,9 @@
 package com.example.Hackathon.service;
 
+import com.example.Hackathon.dto.PostDtoAll;
+import com.example.Hackathon.dto.VacancyAllDto;
 import com.example.Hackathon.dto.VacancyDto;
-import com.example.Hackathon.entity.Comments;
-import com.example.Hackathon.entity.Status;
-import com.example.Hackathon.entity.Vacancy;
+import com.example.Hackathon.entity.*;
 import com.example.Hackathon.exception.ResourceNotFoundException;
 import com.example.Hackathon.repository.UserRepository;
 import com.example.Hackathon.repository.VacancyRepo;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.Access;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -26,9 +27,21 @@ public class VacancyService {
     @Autowired
     UserService userService;
 
-    public List<Vacancy> getAllVacancies()
+    public List<VacancyAllDto> getAllVacancies()
     {
-        return vacancyRepo.findAll();
+        List<Vacancy> list = vacancyRepo.findByStatus(Status.ACTIVATE);
+        List<VacancyAllDto> result = new ArrayList<>();
+        for (Vacancy vacancy : list) {
+            VacancyAllDto model = new VacancyAllDto();
+            model.setDescription(vacancy.getDescription());
+            model.setVacancy_topic(vacancy.getVacancy_topic());
+            model.setCompanyName(vacancy.getCompanyName());
+            model.setDate(vacancy.getDate());
+            model.setNickname(vacancy.getUser().getNickname());
+            model.setCountryCode(vacancy.getUser().getCountryCode());
+            result.add(model);
+        }
+        return result;
     }
 
     public Vacancy createVacancy(VacancyDto vacancyDto)

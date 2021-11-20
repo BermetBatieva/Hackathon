@@ -1,6 +1,7 @@
 package com.example.Hackathon.controller;
 
 import com.example.Hackathon.dto.NewsDto;
+import com.example.Hackathon.dto.VacancyAllDto;
 import com.example.Hackathon.dto.VacancyDto;
 import com.example.Hackathon.entity.Vacancy;
 import com.example.Hackathon.service.VacancyService;
@@ -36,7 +37,7 @@ public class VacancyController {
     }
 
     @GetMapping("all")
-    public List<Vacancy> getAll(){
+    public List<VacancyAllDto> getAll(){
         return vacancyService.getAllVacancies();
     }
 }
