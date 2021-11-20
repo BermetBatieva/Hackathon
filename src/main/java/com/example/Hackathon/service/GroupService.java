@@ -69,6 +69,7 @@ public class GroupService{
                 () -> new ResourceNotFoundException("нет группы с такой id ", id));
         GroupDto groupDto = new GroupDto();
 
+        groupDto.setCode(group.getCode());
         groupDto.setName(group.getName());
         groupDto.setId(group.getId());
 
