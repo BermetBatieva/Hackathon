@@ -83,4 +83,9 @@ public class NewsService {
         }
     }
 
+    public List<News> getAll(){
+        List<News> news = newsRepo.findByStatus(Status.ACTIVATE);
+        return  news;
+    }
+
 }

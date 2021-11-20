@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin
@@ -30,5 +32,13 @@ public class PostsController {
     @GetMapping("all/{categoryId}")
     public List<PostDtoByCategory> getAllPostInMainByCategory(@PathVariable Long categoryId){
         return postsService.allPostByCategory(categoryId);
+    }
+
+
+    @ApiOperation(value = "много фоток на посты")
+    @PutMapping("/image/{id}")
+    public ResponseEntity<Posts> setImage(@RequestParam(name = "file") MultipartFile[] multipartFile,
+                                          @PathVariable Long id) throws IOException, IOException {
+        return postsService.setImage(multipartFile,id);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.Hackathon.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.Hackathon.dto.PostDto;
 import com.example.Hackathon.dto.PostDtoByCategory;
 import com.example.Hackathon.entity.*;
@@ -9,15 +11,18 @@ import com.example.Hackathon.repository.CommentsRepo;
 import com.example.Hackathon.repository.ImageRepo;
 import com.example.Hackathon.repository.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PostsService {
@@ -92,14 +97,48 @@ public class PostsService {
         return result;
     }
 
-//    List<Comments> commentsList = commentsRepo.findByPosts_IdAndStatus(posts.getId(),Status.ACTIVATE);
-//
-//    List<String> comList = new ArrayList<>();
-//
-//            for(Comments i :  commentsList){
-//        comList.add(i.getComments());
-//    }
-//            model.setCommentsList(comList);
+
+    public ResponseEntity<Posts> setImage(MultipartFile[] files, Long postId) throws IOException {
+        final String urlKey = "cloudinary://513184318945249:-PXAzPrMMtx1J7NCL1afdr59new@neobis/";
+        List<Image> images = new ArrayList<>();
+        Posts posts = postRepo.findById(postId).orElseThrow(
+                ()-> new ResourceNotFoundException("нет здания с таким id = ", postId)
+        );
+
+        Arrays.asList(files).forEach(file -> {
+
+            File file1;
+            try {
+                file1 = Files.createTempFile(System.currentTimeMillis() + "",
+                                Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().length() - 4))
+                        .toFile();
+                file.transferTo(file1);
+
+                Cloudinary cloudinary = new Cloudinary(urlKey);
+                Map uploadResult = cloudinary.uploader().upload(file1, ObjectUtils.emptyMap());
+
+                Image image = new Image();
+                image.setPosts(posts);
+                image.setName((String) uploadResult.get("public_id"));
+                image.setUrl((String) uploadResult.get("url"));
+                image.setFormat((String) uploadResult.get("format"));
+
+                images.add(imageRepo.save(image));
+
+
+
+            } catch (IOException e) {
+                try {
+                    throw new IOException("failed to install image");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        return ResponseEntity.ok().body(posts);
+    }
+
+
 
 
 

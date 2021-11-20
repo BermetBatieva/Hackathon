@@ -97,10 +97,10 @@ public class LoginController {
     }
 
     @ApiOperation(value = "Вход в группу нужно только code")
-    @PostMapping("/join-to-group")
-    public ResponseEntity<Group> joinToGroup(@RequestBody GroupDto groupDto)
+    @PostMapping("/join-to-group/{code}")
+    public ResponseEntity<Group> joinToGroup(@PathVariable Long code)
     {
-        return new ResponseEntity<>(groupService.joinGroup(groupDto.getCode()),
+        return new ResponseEntity<>(groupService.joinGroup(code),
                 HttpStatus.OK);
     }
 
